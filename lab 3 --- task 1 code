@@ -1,0 +1,29 @@
+#include <Arduino.h>
+uint8_t value;
+
+void setup() {
+    DDRD &= 0x0F;
+
+    PORTD |= 0xF0; 
+
+    DDRB &= 0x0F;
+
+    Serial.begin(9600);
+}
+
+void loop(){
+  // Read the value from the input pins (PD4 to PD7)
+  value = PIND;
+  value &= 0xF0;
+  value >>= 4;
+  value = ~value;
+  value &= 0x0F;
+  PORTB = value;
+
+  Serial.print("Binary: "); 
+  Serial.println(value, BIN);
+  Serial.print("Decimal: ");
+  Serial.println(value);
+  
+  delay(500);  
+}
