@@ -1,0 +1,43 @@
+#include <Arduino.h>
+#include <SPI.h>
+#include <SD.h>
+
+const int chipSelect = 10;
+const int potPin = A0;
+int sensorValue = 0;
+int position = 0;
+
+File dataFile;
+
+void setup() {
+	Serial.begin(9600);
+    Serial.println("");
+	Serial.println("Program Started");
+	Serial.println("Initializing SD Card...");
+
+	if (!SD.begin(chipSelect)) {
+		Serial.println("SD Card Not Found");
+	} else {
+		Serial.println("SD Card Found");
+	}
+}
+    
+ 
+void loop() {
+	Serial.println(position);
+	delay(1000);
+    sensorValue = analogRead(potPin);
+    Serial.print("Value = ");
+    Serial.println(sensorValue);
+    delay(500);
+
+if (dataFile = SD.open("sensor.txt", FILE_WRITE)) {
+    dataFile.println("value = ");
+    dataFile.println(sensorValue);
+    dataFile.close(); 
+    delay(1000);
+} else {
+    Serial.println("error opening sensor.txt");
+    }
+}
+
