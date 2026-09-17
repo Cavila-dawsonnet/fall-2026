@@ -1,0 +1,68 @@
+#include <Arduino.h>
+#include <SPI.h>
+#include <SD.h>
+
+const int chipSelect = 10;
+const int potPin = A0;
+
+File dataFile;
+
+void setup() {
+	 Serial.begin(9600);
+
+     dataFile = SD.open("sensor.csv", FILE_WRITE);
+     Serial.println("");
+	 Serial.println("Program Started");
+	 Serial.println("Initializing SD Card...");
+
+     if (SD.begin(chipSelect)) {
+         Serial.println("SD Card Initialized.");
+     } else {
+         Serial.println("SD Card Initialization Failed.");
+     }
+
+
+    if (dataFile) {
+   
+        dataFile.println("Time, Value");
+         
+        dataFile.close();
+        
+        Serial.println("CSV Header Written");
+
+    } else { 
+        
+        Serial.println("Failed to create file");
+    
+    }
+    
+}
+    
+ 
+void loop() {
+     int sensorValue = analogRead(potPin);  
+     unsigned long currentTime = millis() / 1000;
+	 delay(500);
+        
+     /// print potentiometer value to serial monitor
+         Serial.println("Value = ");
+         Serial.println(sensorValue);
+         delay(500);
+        
+
+     /// write potentiometer value to SD card
+dataFile = SD.open("sensor.csv", FILE_WRITE);
+
+if (dataFile) {
+
+         dataFile.print(currentTime);
+         dataFile.print(", ");
+         dataFile.print(sensorValue);
+         dataFile.close();     
+         delay(500);
+
+    } else { 
+         Serial.println("File not created");
+    }
+
+}
