@@ -20,7 +20,8 @@ void setup() {
 	}
 	Serial.println("SD Card Found");
 
-  dataFile = SD.open("data.txt", FILE_WRITE);
+  SD.remove("sensor.csv");
+  dataFile = SD.open("sensor.csv", FILE_WRITE);
     if (dataFile) {
       dataFile.println("Time, Value");
       dataFile.close();
