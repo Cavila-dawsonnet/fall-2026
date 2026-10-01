@@ -1,0 +1,48 @@
+#include <Arduino.h>
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BME280.h>
+
+Adafruit_BME280 bme;
+float temperature;
+float altitude;
+float pressure;
+
+void setup(){
+  Serial.begin(9600);
+  Serial.println("");
+  Serial.println("Program Started");
+  Wire.begin();                       // starts the I2C 
+  Serial.println("I2C Started");
+
+  if (bme.begin(0x76))                // check if the BME280 sensor is connected at address 0x76
+    {
+     Serial.println("BME280 Found at 0x76");
+    }
+      else if (bme.begin(0x77))
+    {
+      Serial.println("BME280 Found at 0x77");
+    }
+    else
+    {
+      Serial.println("BME280 Not Found");
+    }
+
+}
+ void loop(){
+  // ===== temperature ======
+  temperature = bme.readTemperature(); // read temperature in Celsius
+  Serial.print("Temperature: ");
+  Serial.print(temperature);
+  Serial.println(" C");
+  
+  //====== altitude ======
+  altitude = bme.readAltitude(1013.25); // read altitude in meters
+  Serial.print("Altitude: ");
+  Serial.print(altitude);
+  Serial.println(" m");
+
+delay(1000);
+
+  
+}
