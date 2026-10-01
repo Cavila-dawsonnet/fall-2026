@@ -1,0 +1,104 @@
+#include <Arduino.h>
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BME280.h>
+#include <SPI.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+
+Adafruit_BME280 bme;
+float temperature;
+float altitude;
+float pressure;
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_MOSI 11
+#define OLED_CLK 13
+#define OLED_DC 9
+#define OLED_CS 10
+#define OLED_RST 8
+
+Adafruit_SSD1306 display(
+	SCREEN_WIDTH,
+	SCREEN_HEIGHT,
+	OLED_MOSI,
+	OLED_CLK,
+	OLED_DC,
+	OLED_RST,
+	OLED_CS
+);
+
+
+void setup(){
+  Serial.begin(9600);
+  Serial.println("");
+  Serial.println("Program Started");
+  Wire.begin();                       // starts the I2C 
+  Serial.println("I2C Started");
+
+  if (bme.begin(0x76))                // check if the BME280 sensor is connected at address 0x76
+    {
+     Serial.println("BME280 Found at 0x76");
+    }
+      else if (bme.begin(0x77))
+    {
+      Serial.println("BME280 Found at 0x77");
+    }
+    else
+    {
+      Serial.println("BME280 Not Found");
+    }
+    
+
+  // ===== OLED Display Setup ======
+  display.begin(SSD1306_SWITCHCAPVCC);    // initialize the OLED display
+  display.clearDisplay();// Clear Display
+  display.setTextSize(1); // Set Text Size
+  display.setTextColor(SSD1306_WHITE); // Set Text Color
+  display.display(); // Update Display
+
+}
+
+void loop(){
+  // ===== temperature ======
+  temperature = bme.readTemperature(); // read temperature in Celsius
+  Serial.print("Temperature: ");
+  Serial.print(temperature);
+  Serial.println(" C");
+  
+  //====== altitude ======
+  altitude = bme.readAltitude(1013.25); // read altitude in meters
+  Serial.print("Altitude: ");
+  Serial.print(altitude);
+  Serial.println(" m");
+
+  // ===== pressure ======
+  pressure = bme.readPressure() / 100.0F; // read pressure in hPa
+  Serial.print("Pressure: ");
+  Serial.print(pressure);
+  Serial.println(" hPa");
+
+  // ===== Display on OLED ======
+    display.clearDisplay(); // Clear the display
+    display.setCursor(0,0); // Move the cursor to the top-left corner
+
+    // ==== read temperature ====
+      display.print("Temp: ");
+      display.print(temperature);
+      display.println(" C");
+    // ==== read altitude ====  
+      display.print("Alt: ");
+      display.print(altitude);
+      display.println(" m");
+    // ==== read pressure ====
+      display.print("Pres: ");
+      display.print(pressure);
+      display.println(" hPa");
+    // Update display
+      display.display();
+
+ delay(1000); // Wait one second
+
+}
