@@ -1,0 +1,49 @@
+#include <Arduino.h>
+#include <Wire.h>
+#include <Adafruit_BME280.h>
+#include <Adafruit_Sensor.h>
+#include <WiFi.h>
+#include <WebServer.h>
+
+Adafruit_BME280 bme;
+float temperature;
+const char*ssid = "stanza";
+const char*password = "letmeintwin";
+WebServer server(80);
+
+void setup() {
+  Serial.begin(115200);
+  Serial.println("Program Started");	
+
+  // BMP280 code
+	// LED code
+	// Wi-Fi code
+	// Routes
+	// Server start
+
+  Wire.begin();
+
+  if (bme.begin(0x76)) {
+    Serial.println("BME280 Found");
+  } else {
+    Serial.println("BME280 Not Found");
+  }
+
+  WiFi.softAP(ssid,password);
+  Serial.print("IP address: ");
+  Serial.println(WiFi.softAPIP());
+
+  server.begin();
+  Serial.println("Web Server Started");  
+
+}
+
+void loop(){
+  temperature =  bme.readTemperature();
+
+  Serial.print("Temperature:");
+  Serial.print(temperature);
+  Serial.println(" C");
+
+  delay(1000);
+}
