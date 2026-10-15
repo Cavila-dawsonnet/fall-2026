@@ -39,7 +39,7 @@ void setup(){
     Serial.println("OLED started");
 
     display.clearDisplay();
-    showOnOLED("Lab 8: BLE", "Constanza Avila Ramirez");
+    showOnOLED("Lab 8: BLE", "Constanza");
     display.display();
 
   // BLE code
