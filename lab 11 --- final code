@@ -251,6 +251,3 @@ void loop(){
   }
   delay(50);     // ignore switch bounce when the button is released
 }
-
-
-
