@@ -16,7 +16,7 @@
 
 // ---------- Global variables ----------
   // Part IV – resolution
-    const int ADC_BITS = 9;       // try 12, 11, 10 and 9
+    const int ADC_BITS = 12;       // try 12, 11, 10 and 9
   // Part V – sampling
     const unsigned long SAMPLE_RATE = 200;   // samples per second (Hz)
     const unsigned long SAMPLE_PERIOD = 1000000 / SAMPLE_RATE;   // µs between samples
@@ -29,9 +29,8 @@
     const int SINE_STEPS = 8;     // points in one sine cycle
     const int STEP_DELAY = 30;     // ms between points
   // Part VII – PWM
-  #define LED_PIN    0            // PWM channel for the LED
-  const int PWM_FREQ = 5000;     // PWM frequency (Hz)
-  const int PWM_RES = 8;         // 8 bits: duty 0 – 255
+    const int PWM_FREQ = 5000;     // PWM frequency (Hz)
+    const int PWM_RES = 8;         // 8 bits: duty 0 – 255
 
 
 // ---------- Part functions ----------
@@ -119,9 +118,12 @@ void partPWM(){
   int duty = map(potValue, 0, 4095, 0, 255);     // 0 – 4095 → 0 – 255
   ledcWrite(LED_PIN, duty);                        // set the LED duty
 
-  Serial.print("duty = ");  Serial.print(duty);
-  Serial.print("   duty cycle = ");  Serial.print(duty * 100 / 255);  Serial.println(" %");
-delay(100);
+  Serial.print("duty = ");  
+  Serial.print(duty);
+  Serial.print("   duty cycle = ");  
+  Serial.print(duty * 100 / 255);  
+  Serial.println(" %");
+  delay(100);
 
 }
 
